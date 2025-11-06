@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +45,13 @@ public class UserService {
                 .email(user.getEmail())
                 .createdAt(user.getCreatedAt().format(formatter))
                 .build();
+    }
+
+    public Optional<User> findByUsernameOrEmail(String usernameOrEmail) {
+        Optional<User> userByUsername = userRepository.findByUsername(usernameOrEmail);
+        if (userByUsername.isPresent()) {
+            return userByUsername;
+        }
+        return userRepository.findByEmail(usernameOrEmail);
     }
 }
